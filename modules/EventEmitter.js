@@ -1,3 +1,6 @@
+// Singleton that controls the emission of messages for the
+// pub/sub pattern.
+
 let listeners = {};
 
 export default {
@@ -9,9 +12,9 @@ export default {
     },
 
     // run the function assigned to a message
-    emit(message, payload = null) {
+    emit(message, payload = null) {        
         if (listeners[message]) {
-            listeners[message].forEach((l) => l(message, payload));
+            listeners[message].forEach((l) => l(payload));
         }
     },
 

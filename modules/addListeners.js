@@ -1,32 +1,40 @@
-import EventEmitter from "./EventEmitter";
+import EventEmitter from "./EventEmitter.js";
+import GameObjectsList from "./GameObjectsList.js";
+import Messages from "./messages.js";
+import GameLoopManager  from "./GameLoopManager.js";
+
+function isEnemiesDead() {
+    const enemies = GameObjectsList.enemiesAlive();
+    return enemies.length === 0;
+}
 
 function addListeners() {
     // registering the messages
-    EventEmitter.on(Messages.KEY_EVENT_UP, (_, hero) => {
+    EventEmitter.on(Messages.KEY_EVENT_UP, (hero) => {
         hero.y -= 5;
     })
 
-    EventEmitter.on(Messages.KEY_EVENT_DOWN, (_, hero) => {
+    EventEmitter.on(Messages.KEY_EVENT_DOWN, (hero) => {
         hero.y += 5;
     });
 
-    EventEmitter.on(Messages.KEY_EVENT_LEFT, (_, hero) => {
+    EventEmitter.on(Messages.KEY_EVENT_LEFT, (hero) => {
         hero.x -= 5;
     });
 
-    EventEmitter.on(Messages.KEY_EVENT_RIGHT, (_, hero) => {
+    EventEmitter.on(Messages.KEY_EVENT_RIGHT, (hero) => {
         hero.x += 5;
     });
 
-    EventEmitter.on(Messages.KEY_EVENT_SPACE, (_, hero) => {
+    EventEmitter.on(Messages.KEY_EVENT_SPACE, (hero) => {
         if (hero.canFire()) {
             hero.fire();
         }
     });
 
-    EventEmitter.on(Messages.COLLISION_ENEMY_LASER, (_, { first, second }) => {
-        first.dead = true;
-        second.explode();
+    EventEmitter.on(Messages.COLLISION_ENEMY_LASER, ({ laser, enemy, hero }) => {
+        enemy.dead = true;
+        laser.dead = true;
         hero.incrementPoints();
 
         if (isEnemiesDead()) {
@@ -34,11 +42,11 @@ function addListeners() {
         }
     });
 
-    EventEmitter.on(Messages.COLLISION_ENEMY_HERO, (_, { enemy }) => {
+    EventEmitter.on(Messages.COLLISION_ENEMY_HERO, ({ enemy, hero }) => {
         enemy.dead = true;
         hero.decrementLife();
 
-        if (isHeroDead()) {
+        if (hero.isHeroDead()) {
             EventEmitter.emit(Messages.GAME_END_LOSS);
             return; // loss before victory
         }
@@ -48,16 +56,16 @@ function addListeners() {
     });
 
     EventEmitter.on(Messages.GAME_END_WIN, () => {
-        endGame(true);
+        GameLoopManager.endGame("win");
     });
 
     EventEmitter.on(Messages.GAME_END_LOSS, () => {
-        endGame(false);
+        GameLoopManager.endGame("loose");
     });
 
     EventEmitter.on(Messages.KEY_EVENT_ENTER, () => {
-        resetGame();
+        GameLoopManager.resetGame();
     });
 }
 
-export { addListeners };
+export default addListeners;

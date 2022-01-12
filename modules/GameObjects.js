@@ -1,4 +1,4 @@
-import GameObjectsList from "./GameObjectsList";
+import GameObjectsList from "./GameObjectsList.js";
 
 class GameObject {
     constructor(x, y) {
@@ -8,11 +8,28 @@ class GameObject {
         this.type = "";
         this.width = 0;
         this.height = 0;
-        this.img = undefined;
+        this.imgList = {};
+        this.currentImg = undefined;
+    }
+
+    _loadAsset(path) {
+        return new Promise((resolve) => {
+            const img = new Image()
+            img.src = path
+            img.onload = () => {
+                resolve(img)
+            }
+        });
+    }
+
+    async loadImage(path, imgName) {
+        let img = new Image();
+        img = await this._loadAsset(path);
+        this.imgList[imgName] = img;
     }
 
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.imgList[this.currentImg], this.x, this.y, this.width, this.height);
     }
 
     rectFromGameObject() {
@@ -29,6 +46,14 @@ class GameObject {
 class Hero extends GameObject {
     constructor(x, y) {
         super(x, y);
+
+        // loading images
+        this.loadImage("images/hero/player.png", "default");
+        this.loadImage("images/hero/playerDamaged.png", "damaged");
+        this.loadImage("images/hero/playerLeft.png", "left");
+        this.loadImage("images/hero/playerRight.png", "right");
+
+
         this.width = 99;
         this.height = 75;
         this.type = "Hero";
@@ -36,6 +61,7 @@ class Hero extends GameObject {
         this.cooldown = 0;
         this.life = 3;
         this.points = 0;
+        this.currentImg = "default";
     }
 
     fire() {
@@ -65,15 +91,22 @@ class Hero extends GameObject {
     incrementPoints() {
         this.points += 100;
     }
+
+    isHeroDead(){
+        return this.life <= 0;
+    }
 }
 
 class Enemy extends GameObject {
-    constructor(x, y, enemyImg) {
+    constructor(x, y) {
         super(x, y);
+
+        this.loadImage("images/enemy/enemyShip.png", "default");
+        this.currentImg = "default";
+
         this.width = 98;
         this.height = 50;
         this.type = "Enemy";
-        this.img = enemyImg;
 
         let id = setInterval(() => {
             if (this.y < canvas.height - this.height) {
@@ -86,12 +119,16 @@ class Enemy extends GameObject {
 }
 
 class Laser extends GameObject {
-    constructor(x, y, laserImg) {
+    constructor(x, y) {
         super(x, y);
+
+        this.loadImage("images/laserRed.png", "shot");
+        this.currentImg = "shot";
+
         this.width = 9;
         this.height = 33;
-        this.type = 'Laser';
-        this.img = laserImg;
+        this.type = "Laser";
+
         let id = setInterval(() => {
             if (this.y > 0) {
                 this.y -= 15;
@@ -99,7 +136,7 @@ class Laser extends GameObject {
                 this.dead = true;
                 clearInterval(id);
             }
-        }, 100)
+        }, 100);
     }
 }
 
