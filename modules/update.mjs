@@ -1,6 +1,6 @@
-import GameObjectsList from "./GameObjectsList.js";
-import EventEmitter from "./EventEmitter.js";
-import Messages from "./messages.js";
+import GameObjectsList from "./GameObjectsList.mjs";
+import EventEmitter from "./EventEmitter.mjs";
+import Messages from "./messages.mjs";
 
 function intersectRect(r1, r2) {
     return !(

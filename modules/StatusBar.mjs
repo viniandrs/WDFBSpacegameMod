@@ -1,4 +1,8 @@
+import GameObjectsList from "./GameObjectsList.mjs"
+
 let imgLife = undefined;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 function loadImage(path) {
     return new Promise((resolve) => {
@@ -15,9 +19,9 @@ export default {
         imgLife = await loadImage(path);
     },
 
-    drawLife(canvas, hero) {
+    drawLife() {
+        const hero = GameObjectsList.myHero();
         const START_POS = canvas.width - 180;
-        const ctx = canvas.getContext("2d");
 
         for (let i = 0; i < hero.life; i++) {
             ctx.drawImage(
@@ -27,7 +31,8 @@ export default {
         }
     },
 
-    drawPoints(ctx, hero) {
+    drawPoints() {
+        const hero = GameObjectsList.myHero();
         ctx.font = "30px Times New Roman";
         ctx.fillStyle = "red";
         ctx.textAlign = "left";

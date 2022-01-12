@@ -1,7 +1,7 @@
-import EventEmitter from "./EventEmitter.js";
-import GameObjectsList from "./GameObjectsList.js";
-import Messages from "./messages.js";
-import GameLoopManager  from "./GameLoopManager.js";
+import EventEmitter from "./EventEmitter.mjs";
+import GameObjectsList from "./GameObjectsList.mjs";
+import Messages from "./messages.mjs";
+import GameLoopManager  from "./GameLoopManager.mjs";
 
 function isEnemiesDead() {
     const enemies = GameObjectsList.enemiesAlive();

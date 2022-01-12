@@ -1,7 +1,7 @@
-import EventEmitter from "./modules/EventEmitter.js";
-import Messages from "./modules/messages.js";
-import GameObjectsList from "./modules/GameObjectsList.js";
-import GameLoopManager from "./modules/GameLoopManager.js";
+import EventEmitter from "./modules/EventEmitter.mjs";
+import Messages from "./modules/messages.mjs";
+import GameObjectsList from "./modules/GameObjectsList.mjs";
+import GameLoopManager from "./modules/GameLoopManager.mjs";
 
 let onKeyDown = function (e) {
     switch (e.keyCode) {

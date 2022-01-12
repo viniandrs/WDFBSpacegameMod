@@ -1,10 +1,10 @@
-import StatusBar from "./StatusBar.js";
-import GameObjectsList from "./GameObjectsList.js";
-import updateGameObjects from "./update.js";
-import EventEmitter from "./EventEmitter.js";
-import addListeners from "./addListeners.js";
-import createEnemies from "./enemiesSetup.js";
-import createHero from "./heroSetup.js";
+import StatusBar from "./StatusBar.mjs";
+import GameObjectsList from "./GameObjectsList.mjs";
+import updateGameObjects from "./update.mjs";
+import EventEmitter from "./EventEmitter.mjs";
+import addListeners from "./addListeners.mjs";
+import Hero from "./Hero.mjs";
+import Enemy from "./Enemy.mjs";
 
 let gameLoopId = undefined;
 const fps = 10;
@@ -16,6 +16,36 @@ function displayMessage(message, color = "red") {
     ctx.fillStyle = color;
     ctx.textAlign = "center";
     ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+}
+
+function createHero() {
+    const canvas = document.getElementById("canvas");
+    const hero = new Hero(
+        canvas.width / 2 - 45,
+        canvas.height - canvas.height / 4
+    );
+
+    GameObjectsList.addGameObject(hero);
+}
+
+function createEnemies() {
+    const MONSTER_WIDTH = 98;
+    const MONSTER_HEIGTH = 50;
+    const MONSTERS_IN_COLUMN = 5;
+    const MONSTERS_IN_LINE = 5;
+
+    const canvas = document.getElementById("canvas");
+
+    const MONSTER_LINE_WIDTH = MONSTERS_IN_LINE * MONSTER_WIDTH;
+    const START_X = (canvas.width - MONSTER_LINE_WIDTH) / 2;
+    const STOP_X = START_X + MONSTER_LINE_WIDTH;
+
+    for (let x = START_X; x < STOP_X; x += MONSTER_WIDTH) {
+        for (let y = 0; y < MONSTER_HEIGTH * MONSTERS_IN_COLUMN; y += MONSTER_HEIGTH) {
+            const enemy = new Enemy(x, y);
+            GameObjectsList.addGameObject(enemy);
+        }
+    }
 }
 
 export default {
