@@ -1,5 +1,7 @@
 import GameObject from "./GameObject.mjs";
 
+const speed = 1;
+
 class Enemy extends GameObject {
     constructor(x, y) {
         super(x, y);
@@ -15,11 +17,11 @@ class Enemy extends GameObject {
 
         let id = setInterval(() => {
             if (this.y < canvas.height - this.height) {
-                this.y += 5;
+                this.y += speed;
             } else {
                 clearInterval(id);
             }
-        }, 300)
+        }, 50)
     }
 }
 

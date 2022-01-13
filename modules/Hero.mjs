@@ -5,7 +5,7 @@ import KeyManager from "./KeyManager.mjs";
 
 const t = 0.25;
 const acceleration = 5;
-const max_speed = 20;
+const max_speed = 30;
 
 const canvas = document.getElementById("canvas");
 
@@ -32,9 +32,6 @@ class Hero extends GameObject {
         this.currentImg = "default";
 
         let id = setInterval(() => {
-            console.log("acceleration: " + this.x_acceleration);
-            console.log("speed: " + this.x_speed);
-
             let arrowLeftPressed = KeyManager.isPressed("ArrowLeft");
             let arrowRightPressed = KeyManager.isPressed("ArrowRight");
 

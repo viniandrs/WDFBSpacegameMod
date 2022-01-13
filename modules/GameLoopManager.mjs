@@ -1,13 +1,13 @@
 import StatusBar from "./StatusBar.mjs";
 import GameObjectsList from "./GameObjectsList.mjs";
 import updateGameObjects from "./update.mjs";
+import EnemyGenerator from "./EnemyGenerator.mjs";
 import EventEmitter from "./EventEmitter.mjs";
 import addListeners from "./addListeners.mjs";
 import Hero from "./Hero.mjs";
-import Enemy from "./Enemy.mjs";
 
 let gameLoopId = undefined;
-const fps = 10;
+const fps = 30;
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -26,26 +26,6 @@ function createHero() {
     );
 
     GameObjectsList.addGameObject(hero);
-}
-
-function createEnemies() {
-    const MONSTER_WIDTH = 98;
-    const MONSTER_HEIGTH = 50;
-    const MONSTERS_IN_COLUMN = 5;
-    const MONSTERS_IN_LINE = 5;
-
-    const canvas = document.getElementById("canvas");
-
-    const MONSTER_LINE_WIDTH = MONSTERS_IN_LINE * MONSTER_WIDTH;
-    const START_X = (canvas.width - MONSTER_LINE_WIDTH) / 2;
-    const STOP_X = START_X + MONSTER_LINE_WIDTH;
-
-    for (let x = START_X; x < STOP_X; x += MONSTER_WIDTH) {
-        for (let y = 0; y < MONSTER_HEIGTH * MONSTERS_IN_COLUMN; y += MONSTER_HEIGTH) {
-            const enemy = new Enemy(x, y);
-            GameObjectsList.addGameObject(enemy);
-        }
-    }
 }
 
 export default {
@@ -71,6 +51,7 @@ export default {
     },
 
     endGame(status) {
+        EnemyGenerator.stopGenerating();
         clearInterval(gameLoopId);
 
         // set a delay so we are sure any paints have finished
@@ -94,7 +75,7 @@ export default {
 
     initGame() {
         addListeners();
-        createEnemies();
+        EnemyGenerator.startGenerating();
         createHero();
         StatusBar.loadLife("images/life.png");
 

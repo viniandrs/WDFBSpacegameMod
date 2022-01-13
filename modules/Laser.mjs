@@ -1,5 +1,7 @@
 import GameObject from "./GameObject.mjs";
 
+const speed = 15;
+
 class Laser extends GameObject {
     constructor(x, y) {
         super(x, y);
@@ -13,12 +15,12 @@ class Laser extends GameObject {
 
         let id = setInterval(() => {
             if (this.y > 0) {
-                this.y -= 15;
+                this.y -= speed;
             } else {
                 this.dead = true;
                 clearInterval(id);
             }
-        }, 100);
+        }, 50);
     }
 }
 
