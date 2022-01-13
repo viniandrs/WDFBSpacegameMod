@@ -27,7 +27,7 @@ export default {
             ctx.drawImage(
                 imgLife,
                 START_POS + (45 * (i + 1)),
-                37);
+                10);
         }
     },
 
@@ -36,6 +36,6 @@ export default {
         ctx.font = "30px Times New Roman";
         ctx.fillStyle = "red";
         ctx.textAlign = "left";
-        ctx.fillText("Points: " + hero.points, 10, 20);
+        ctx.fillText("Points: " + hero.points, 10, 30);
     }
 }

@@ -9,23 +9,7 @@ function isEnemiesDead() {
 }
 
 function addListeners() {
-    // registering the messages
-    EventEmitter.on(Messages.KEY_EVENT_UP, (hero) => {
-        hero.y -= 5;
-    })
-
-    EventEmitter.on(Messages.KEY_EVENT_DOWN, (hero) => {
-        hero.y += 5;
-    });
-
-    EventEmitter.on(Messages.KEY_EVENT_LEFT, (hero) => {
-        hero.x -= 5;
-    });
-
-    EventEmitter.on(Messages.KEY_EVENT_RIGHT, (hero) => {
-        hero.x += 5;
-    });
-
+    // Write all event messages and add them to the EventEmitter object.
     EventEmitter.on(Messages.KEY_EVENT_SPACE, (hero) => {
         if (hero.canFire()) {
             hero.fire();
