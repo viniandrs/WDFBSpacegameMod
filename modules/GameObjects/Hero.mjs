@@ -1,42 +1,44 @@
 import GameObject from "./GameObject.mjs";
-import GameObjectsList from "./GameObjectsList.mjs";
+import GameObjectsList from "../GameObjectsList.mjs";
 import Laser from "./Laser.mjs";
-import KeyManager from "./KeyManager.mjs";
+import KeyManager from "../KeyManager.mjs";
 
 const t = 0.25;
 const acceleration = 5;
 const max_speed = 30;
-
 const canvas = document.getElementById("canvas");
 
 class Hero extends GameObject {
     constructor(x, y) {
         super(x, y);
 
-        // loading images
-        this.loadImage("images/hero/player.png", "default");
-        this.loadImage("images/hero/playerDamaged.png", "damaged");
-        this.loadImage("images/hero/playerLeft.png", "left");
-        this.loadImage("images/hero/playerRight.png", "right");
-
-        this.width = 99;
-        this.height = 75;
         this.type = "Hero";
-
-        this.x_speed = 0;
-        this.x_acceleration = 0;
 
         this.cooldown = 0;
         this.life = 3;
         this.points = 0;
-        this.currentImg = "default";
 
+        this.x_speed = 0;
+        this.x_acceleration = 0;
+
+        this.sprites = {
+            ship: {
+                spritesheet: "spritesheet1",
+                x: 224,
+                y: 832,
+                width: 99,
+                height: 75
+            }
+        }
+        this.currentSprite = "ship";
+
+        this.width = 99;
+        this.height = 75;        
+
+        // movement interval
         let id = setInterval(() => {
             let arrowLeftPressed = KeyManager.isPressed("ArrowLeft");
             let arrowRightPressed = KeyManager.isPressed("ArrowRight");
-
-            //console.log("acceleration: " + this.x_acceleration);
-            //console.log("speed: " + this.x_speed);
 
             if (arrowLeftPressed === arrowRightPressed) {
                 this.x_acceleration = 0;
@@ -50,22 +52,23 @@ class Hero extends GameObject {
     }
 
     _move() {
+
+        // checking if the player is on the borders
         if (this.x <= 0) {
-            this.x = 10;
+            this.x = 1;
             this.x_speed = 0;
             return;
         } else if (this.x >= canvas.width - this.width) {
-            this.x = canvas.width - this.width - 10;
+            this.x = canvas.width - this.width - 1;
             this.x_speed = 0;
             return;
         }
 
+        // accelerated kinematics for a realistic control of the spaceship
         if (Math.abs(this.x_speed) < max_speed) {
             this.x_speed += this.x_acceleration * t;
-        } else {
-            if(this.x_speed*this.x_acceleration < 0){
-                this.x_speed += this.x_acceleration * t;
-            }
+        } else if (this.x_speed * this.x_acceleration < 0) {
+            this.x_speed += this.x_acceleration * t;
         }
         this.x += (this.x_speed * t + this.x_acceleration * (Math.pow(t, 2) / 2));
     }
@@ -91,6 +94,8 @@ class Hero extends GameObject {
         this.life--;
         if (this.life === 0) {
             this.dead = true;
+        } else if (this.life === 1) {
+            this.currentImg = "damaged";
         }
     }
 

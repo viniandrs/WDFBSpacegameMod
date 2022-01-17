@@ -1,38 +1,36 @@
 import GameObjectsList from "./GameObjectsList.mjs"
+import SpriteSheetManager from "./SpriteSheetManager.mjs"
 
-let imgLife = undefined;
+const sprites = {
+    life: {
+        spritesheet: "spritesheet1",
+        x: 775,
+        y: 301,
+        width: 33,
+        height: 26
+    }
+}
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-function loadImage(path) {
-    return new Promise((resolve) => {
-        const img = new Image()
-        img.src = path
-        img.onload = () => {
-            resolve(img)
-        }
-    })
-}
-
 export default {
-    async loadLife(path) {
-        imgLife = await loadImage(path);
-    },
-
-    drawLife() {
+    drawStatusBar() {
         const hero = GameObjectsList.myHero();
         const START_POS = canvas.width - 180;
 
-        for (let i = 0; i < hero.life; i++) {
-            ctx.drawImage(
-                imgLife,
-                START_POS + (45 * (i + 1)),
-                10);
-        }
-    },
+        // obtaining the spritesheet file from the Manager
+        let sprite = sprites["life"];
+        let spritesheet = SpriteSheetManager.getSpriteSheet(sprite.spritesheet);
 
-    drawPoints() {
-        const hero = GameObjectsList.myHero();
+        for (let i = 0; i < hero.life; i++) {
+            ctx.drawImage(spritesheet,                // spritesheet file
+                sprite.x, sprite.y,                   // sprite location in the spritesheet
+                sprite.width, sprite.height,          // sprite dimensions
+                START_POS + (45 * (i + 1)), 10,     // drawing location on canvas
+                sprite.width, sprite.height);           // drawing dimensions
+        }
+
         ctx.font = "30px Times New Roman";
         ctx.fillStyle = "red";
         ctx.textAlign = "left";

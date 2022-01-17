@@ -1,4 +1,5 @@
 import EventEmitter from "./EventEmitter.mjs";
+import Explosion from "./effects/Explosion.mjs";
 import GameObjectsList from "./GameObjectsList.mjs";
 import Messages from "./messages.mjs";
 import GameLoopManager  from "./GameLoopManager.mjs";
@@ -17,7 +18,12 @@ function addListeners() {
     });
 
     EventEmitter.on(Messages.COLLISION_ENEMY_LASER, ({ laser, enemy, hero }) => {
+        let explosion = new Explosion(enemy.x + enemy.width/2, enemy.y + enemy.height/2);
+        setTimeout(()=>{
+            explosion = null;
+        }, 800);
         enemy.dead = true;
+
         laser.dead = true;
         hero.incrementPoints();
 

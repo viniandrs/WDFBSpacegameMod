@@ -3,6 +3,7 @@ import Messages from "./modules/messages.mjs";
 import GameObjectsList from "./modules/GameObjectsList.mjs";
 import GameLoopManager from "./modules/GameLoopManager.mjs";
 import KeyManager from "./modules/KeyManager.mjs";
+import addListeners from "./modules/addListeners.mjs"
 
 window.addEventListener('keydown', (evt) => {
     const hero = GameObjectsList.myHero();
@@ -36,5 +37,6 @@ window.addEventListener("keyup", (evt) => {
 });
 
 window.onload = async () => {
+    addListeners();
     GameLoopManager.initGame();
 };

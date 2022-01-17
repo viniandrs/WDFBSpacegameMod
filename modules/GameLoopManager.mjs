@@ -1,10 +1,12 @@
+// Singleton that controls the game flow.
+
 import StatusBar from "./StatusBar.mjs";
 import GameObjectsList from "./GameObjectsList.mjs";
 import updateGameObjects from "./update.mjs";
 import EnemyGenerator from "./EnemyGenerator.mjs";
-import EventEmitter from "./EventEmitter.mjs";
-import addListeners from "./addListeners.mjs";
-import Hero from "./Hero.mjs";
+import SpriteSheetManager from "./SpriteSheetManager.mjs";
+//import EventEmitter from "./EventEmitter.mjs";
+import Hero from "./GameObjects/Hero.mjs";
 
 let gameLoopId = undefined;
 const fps = 30;
@@ -19,7 +21,6 @@ function displayMessage(message, color = "red") {
 }
 
 function createHero() {
-    const canvas = document.getElementById("canvas");
     const hero = new Hero(
         canvas.width / 2 - 45,
         canvas.height - canvas.height / 4
@@ -40,12 +41,11 @@ export default {
             // process collisions
             updateGameObjects();
 
-            // update screen info
-            StatusBar.drawLife(canvas, hero);
-            StatusBar.drawPoints(ctx, hero);
-
             //drawing game objects in the canvas
-            GameObjectsList.drawGameObjects(ctx);
+            GameObjectsList.drawGameObjects();
+
+            // update screen info
+            StatusBar.drawStatusBar();
 
         }, 1000 / fps);
     },
@@ -70,14 +70,16 @@ export default {
                     "You died !!! Press [Enter] to start a new game Captain Pew Pew"
                 );
             }
-        }, 200)
+        }, 1000);
     },
 
     initGame() {
-        addListeners();
+        // loading spritesheets
+        SpriteSheetManager.loadSpriteSheet("images/spritesheet1.png", "spritesheet1");
+        SpriteSheetManager.loadSpriteSheet("images/explosion.png", "explosion");
+
         EnemyGenerator.startGenerating();
         createHero();
-        StatusBar.loadLife("images/life.png");
 
         this.GameLoop();
     },
@@ -85,7 +87,7 @@ export default {
     resetGame() {
         if (gameLoopId) {
             clearInterval(gameLoopId);
-            EventEmitter.clear();
+            //EventEmitter.clear();
             GameObjectsList.clearList();
             this.initGame();
         }

@@ -21,8 +21,8 @@ export default {
         list = list.filter(go => !go.dead);
     },
 
-    drawGameObjects(ctx) {
-        list.forEach(go => go.draw(ctx));
+    drawGameObjects() {
+        list.forEach(go => go.draw());
     },
 
     clearList() {

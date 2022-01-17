@@ -1,0 +1,11 @@
+Hero: playerShip1_red.png
+<SubTexture name="playerShip1_red.png" x="224" y="832" width="99" height="75"/>
+
+Enemy: enemyBlack1.png
+<SubTexture name="enemyBlack1.png" x="423" y="728" width="93" height="84"/>
+
+Laser: laserRed01.png
+<SubTexture name="laserRed01.png" x="858" y="230" width="9" height="54"/>
+
+Player life:
+<SubTexture name="playerLife1_red.png" x="775" y="301" width="33" height="26"/>

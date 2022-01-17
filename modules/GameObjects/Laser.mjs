@@ -6,8 +6,16 @@ class Laser extends GameObject {
     constructor(x, y) {
         super(x, y);
 
-        this.loadImage("images/laserRed.png", "shot");
-        this.currentImg = "shot";
+        this.sprites = {
+            laser: {
+                spritesheet: "spritesheet1",
+                x: 858,
+                y: 230,
+                width: 9,
+                height: 54
+            }
+        }
+        this.currentSprite = "laser";
 
         this.width = 9;
         this.height = 33;
